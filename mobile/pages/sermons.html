@@ -1,0 +1,458 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+     <link href="../styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
+    <link href="../styles/app.css" rel="stylesheet" />
+    <link href="../styles/gdc.mobile.min.css" rel="stylesheet" />
+    <link href="../styles/jquery.mobile.structure-1.3.0.min.css" rel="stylesheet" />  
+    <script data-main="../scripts/app/appstart.min.js" src="../../scripts/libraries/require.js"></script>
+</head>
+<body  style="background-color:#343131;  color: white; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+    <div data-role="page" id="pg_sermons" data-theme="a">
+        <div data-role="panel" id="pg_sermons_menuPanel" data-display="push" data-theme="g">
+            <div style="width: 100%; max-width: 80px; max-height: 80px; margin-left: auto; margin-right: auto">
+                <img border="0" src="" class="menu_fbpic" alt="facebook profile pic" style="width: 100%; height: auto" />
+
+            </div>
+            <ul data-role="listview" data-theme="i" class="slideMenuListView" data-inset="true" data-divider-theme="g">
+                
+                 <li><a href="#" class="menu_home">Home</a></li>
+                 <li><a href="#" class="menu_sermons">Sermons</a></li>
+                <li><a href="#" class="menu_followup">Follow Up</a></li>
+                       <li><a href="#" class="menu_messages">Messages</a></li>
+                 <li><a href="#" class="menu_pinfo">Personal Info</a></li>
+                 <li><a href="#" class="menu_subs">Newsletters</a></li>    
+                <li><a href="#" class="menu_groups">Groups</a></li>       
+                 <li><a href="#" class="menu_eventProfiles">Upcoming Events</a></li>
+                   <li><a href="#" class="menu_churchlife">Church Life</a></li>    
+                    
+                <li> <a href="#"  class="menu_closeMenu" data-theme="d" >Close Menu</a></li>
+            </ul>
+        </div>
+        <div data-role="header">
+            <a href="#" id="pg_sermons_showMenu" data-icon="bars" data-theme="b" data-role="button">menu<span class="slideMenuButtonBubbleSpan"></span></a>
+            <h1 class="pageHeader" id="pg_sermons_header">sermons</h1>
+                 <a href="home.html" data-icon="home" data-theme="b" data-transition="slide" data-direction="reverse"  data-role="button" data-iconpos="notext" >home</a>
+        </div>
+        <!-- /header -->
+        <div data-role="content" style="padding: 15px">
+            <div data-role="popup" class="ui-content" id="pg_sermons_errpopup" data-theme="e">
+                <div id="pg_sermons_errpopmessage"></div>
+            </div>
+            <div data-role="popup" class="ui-content" id="msgpopup" data-theme="b">
+                <div id="msgpopupcontent"></div>
+            </div>
+
+
+            <script id="sermonfeeds-template" type="text/html">
+                <li data-role="list-divider" data-bind="attr: {id: id}" class="viewfeeditems">
+                    <h5 data-bind="text: title()"></h5>
+                    <div style="font-size: x-small; font-style: italic" data-bind="html: 'last update: ' + lastUpdatedTime()"></div>
+                    <span class="ui-li-count" data-bind="text: items().length"></span></li>
+                <li  >
+                    <a data-bind="attr: {'data-id': id}" class="viewfeeditems" data-transition="slide">
+                        <img data-bind="attr: {src: imageUrl}" />
+                        <div>
+                            <p style="white-space: normal; font-size: small" data-bind="html: description" class="ui-content ui-body-a ui-corner-all"></p>
+                            <div data-bind="if: isGlobalDefault">
+                                <p  style="white-space: normal; font-size: x-small; font-style:italic" class="ui-content ui-body-h ui-corner-all">This is a default feed that was preloaded for this church.</p>
+
+                            </div>
+                                                    
+                        </div>
+                        
+
+
+
+                    </a>
+
+
+                </li>
+
+
+            </script>
+
+            <script id="sermonfeeditems-template" type="text/html">
+
+                <li data-bind="attr: {id: id}">
+                    <a data-bind="attr: {'data-id': id}" class="viewitem" data-transition="slide">
+                        <p data-bind="text: title" style="white-space: normal; font-size: medium"></p>
+
+
+                    </a>
+
+                </li>
+
+            </script>
+
+            <div id="pg_sermons_feeds" style="display: none">
+
+                <a href="#" data-rel="popup" id="btnOpenFeedsActionMenu" data-role="button" data-transition="slidedown" data-icon="gear" data-theme="i">Actions...</a>
+                <div data-role="popup" id="sermons_feeds_actionmenu" data-theme="i">
+                    <ul data-role="listview" data-inset="true" style="min-width: 210px;" data-theme="i">
+                       
+                        <li><a href="#" id="btnRefreshSermonFeeds">Refresh Feeds</a></li>
+                       <!-- <li><a href="#" id="btnSyncAllFeeds">Sync Feeds (BETA)</a></li>-->
+                        <li><a href="#pg_sermonfeeds_whatisthis" data-rel="popup" data-transition="slideup" data-position-to="window">What is this?</a></li>
+
+                        <li><a href="#" data-rel="back">Cancel</a></li>
+
+
+                    </ul>
+                </div>
+
+                <ul data-role="listview" data-inset="true" data-theme="a" id="sermons_feeds" data-divider-theme="b" data-bind="template: { name: 'sermonfeeds-template', foreach: feeds}"></ul>
+
+                <div data-role="popup" id="pg_sermonfeeds_whatisthis" data-overlay-theme="a" style="max-width: 400px;"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+                        <h1>Feeds</h1>
+                    </div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+
+                        <p>
+                            Your church can <strong>publish any number of audio channels</strong> (feeds) allowing you to have access to the content. 
+
+                        </p>
+                        <p>
+                            For example your church could make available the <strong>most recent Sunday Sermons</strong> through services like iTunes or MediaFire. You can quickly and 
+                        easily get access to this content from within this app.
+                        </p>
+                        <p>
+                            Below are listed the channels that are <strong>currently published</strong> within your church/ministry. Simply click on the channels to view the content 
+                        </p>
+
+
+
+                        <a href="#" data-role="button" data-theme="h" data-rel="back">thanks!</a>
+
+                    </div>
+                </div>
+
+                <div id="pg_sermons_nofeed" style="display: none">
+
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+                        <h1>No Feeds</h1>
+                    </div>
+                    <div data-role="content" data-theme="h" class="ui-corner-bottom">
+                          <p>
+                            Currently there are <strong>no channels published</strong> by this church/ministry.  
+                        </p>
+                        <p>
+                            Using channels and RSS feeds your church can publish and make available any content directly to this device. Whether it be the <strong>latest
+                        Sunday Sermons, messages from your recent conference</strong> or simply some great teachings for you to enjoy. 
+                        </p>
+                        <p>
+                            Godochurch gives your church the ability to bring in these channels from many different locations including <strong>iTunes, MediaFire, Sermon.Net 
+                        and many others</strong>.
+                        </p>
+                        <p><strong>Please contact your church or ministry office</strong> to ask them to make available this content.</p>
+                    </div>
+                    
+
+                </div>
+
+
+
+            </div>
+
+            <div id="pg_sermon_feeditems" style="display: none">
+
+
+
+                <a href="#" data-rel="popup" id="btnOpenFeedItemsActionMenu" data-role="button" data-transition="slidedown" data-icon="gear" data-theme="i">Actions...</a>
+                <div data-role="popup" id="sermons_feeditems_actionmenu" data-theme="i">
+                    <ul data-role="listview" data-inset="true" style="min-width: 210px;" data-theme="i">
+                       
+                       <!-- <li><a href="#" id="btnSubscribeToFeed">Subscribe to Channel</a></li>-->
+                        <li><a href="#" id="btnViewFeedRssUrl">View RSS</a></li>
+                        <li><a href="#" id="btnGoBackToFeeds">Back to Channels</a></li>
+                        <li><a href="#pg_sermonfeeditems_whatisthis" data-rel="popup" data-transition="slideup" data-position-to="window">What is this?</a></li>
+
+                        <li><a href="#" data-rel="back">Cancel</a></li>
+
+
+                    </ul>
+                </div>
+
+
+                <div data-role="popup" id="pg_sermons_feedRssPopup" data-overlay-theme="a" style="max-width: 400px;"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="c" class="ui-corner-top">
+                        <h1>RSS Feed</h1>
+                    </div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+
+                        <p>
+                            Below you will find the raw RSS feed to this channel. You can copy this link to your clipboard for your own use"
+                        </p>
+                        <textarea style="height: 100px; width: 100%" id="txtFeedRssUrl"></textarea>
+
+
+
+
+                        <a href="#" data-role="button" data-rel="back" data-theme="c">thanks!</a>
+
+                    </div>
+                </div>
+
+
+
+                <div data-role="popup" id="pg_sermonfeeditems_whatisthis" data-overlay-theme="a" style="max-width: 400px;"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+                        <h1>Feed Items</h1>
+                    </div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+
+                        <p>
+                            This page shows you the <strong>content of the channel (feed)</strong> you have selected. 
+
+                        </p>
+                        <p>
+                            Click <strong>subscribe/un-subscribe</strong> to automatically subscribe/un-subscribe yourself from this channel
+                        </p>
+                        <p>
+                            Click <strong>View RSS</strong> to view the RAW RSS feed which you can use.
+                        </p>
+                        <p>
+                            Simply <strong>click</strong> on the sermon/audio you are interested in
+                        </p>
+
+
+
+
+                        <a href="#" data-role="button" data-theme="h" data-rel="back">thanks!</a>
+
+                    </div>
+                </div>
+
+                <div id="pg_sermon_nofeeditems" class="ui-corner-all" style="display: none">
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+
+                        <h1>No Items Feed</h1>
+                    </div>
+
+                    <div data-role="content" data-theme="h" class="ui-corner-bottom">
+
+                        <p>
+                            This feed/channel appear to have no content.  
+                        </p>
+                        <p>
+                            You can try to refresh your feeds to see if there is new content available. If that still does not work <strong>please contact your church office</strong>
+                            to have them either remove the feed from their systems or update the RSS url that the feed uses 
+                        </p>
+                    </div>
+
+                    
+
+                </div>
+
+
+                <ul data-role="listview" data-inset="true" data-theme="b" id="sermon_feeditems" data-bind="template: { name: 'sermonfeeditems-template', foreach: selectedFeed.items}"></ul>
+            </div>
+
+            <div id="pg_sermon_feeditem" style="display: none">
+
+                <a href="#" data-rel="popup" id="btnOpenFeedItemAction" data-role="button" data-transition="slidedown" data-icon="gear" data-theme="i">Actions...</a>
+                <div data-role="popup" id="sermons_feeditem_actionmenu" data-theme="i">
+                    <ul data-role="listview" data-inset="true" style="min-width: 210px;" data-theme="i">
+                      
+                        <li><a href="#" id="btnFeedItemDownload">Download</a></li>
+                        <!--<li><a href="#" id="btnFeedItemListen" >Listen</a></li>-->
+                        <li><a href="#" id="btnFeedItemEmail">Email Me</a></li>
+                        <li><a href="#" id="btnFeedItemFinished">Mark as Complete</a></li>
+                        <li><a href="#pg_sermonfeeditem_whatisthis" data-rel="popup" data-transition="slideup" data-position-to="window">What is this?</a></li>
+
+                        <li><a href="#" id="btnFeedItemBack">Audio List</a></li>
+                        <li><a href="#" id="btnFeedItemCancel">Cancel</a></li>
+
+
+                    </ul>
+                </div>
+
+                <!--  <div data-role="popup" id="sermons_feeditem_audioplayer" data-overlay-theme="b" style="max-width: 400px; min-width: 300px"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="c" class="ui-corner-top">
+                        <h1>Audio Player</h1>
+                    </div>
+                    <div data-role="content" class="ui-corner-bottom ui-content">
+                        <p id="sermons_audio_title"></p>
+                        <audio id="sermon_audio_player" controls="controls" src="#">
+                            Your browser does not support the audio element, please use a later version.
+                        </audio>
+
+                        <div class="ui-body-b" style="padding: 2px" id="feedItemAdioPlayerMsg">
+                        </div>
+                        <div class="ui-body-e" style="padding: 2px" id="feedItemAdioPlayerErr">
+                        </div>
+
+                        <a href="#" data-rel="back" data-role="button" data-theme="b">close</a>
+
+
+
+                    </div>
+                </div>-->
+
+                <div data-role="popup" id="pg_sermonfeeditem_whatisthis" data-overlay-theme="a" style="max-width: 400px;"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+                        <h1>Content</h1>
+                    </div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+
+                        <p>
+                            This is the actual content of the item you selected. 
+
+                        </p>
+                        <p>
+                            Click <strong>Listen</strong> to listen to the audio. (APP USERS: We recommend you are connected via wireless for this.)
+                        </p>
+                        <p>
+                            Click <strong>Download</strong> to download the content. (APP USERS: We recommend you are connected via wireless for this.)
+                        </p>
+
+                        <p>
+                            Click <strong>Email Me</strong> to have the link to the online content emailed to you
+
+                        </p>
+                        <p>
+                            Click <strong>Completed</strong> to mark this audio as completed (i.e. you have listened to it). This will update your account and bring in the next audio file.
+
+                        </p>
+
+
+
+
+                        <a href="#" data-role="button" data-theme="h" data-rel="back">thanks!</a>
+
+                    </div>
+                </div>
+
+                <div class="ui-body-b  ui-corner-all" style="padding: 2px; margin-bottom: 5px">
+
+                    <div class="ui-body-b  ui-corner-all" id="pg_sermon_download_confirm" style="padding: 2px; margin-bottom: 5px; display: none">
+                        <div data-role="header" data-theme="b" class="ui-corner-top">
+                            <h4>Download</h4>
+                        </div>
+
+                        <div id="downloadSermonNotWifi" class="ui-body-e ui-content  ui-corner-all">
+                            <div>
+                                Your device is not connected over a WiFi network. Downloading a file could incur high data charges on your monthly account.
+                        These charges are charged by your mobile service provider. 
+                        
+                            </div>
+                            <p>
+                                Do you want to continue with this download?
+                            </p>
+                        </div>
+
+                        <div id="downloadSermonWithWifi" class="ui-body-b ui-content  ui-corner-all">
+                            <div>
+                                You have requested to download the selected item. You are connected over Wifi. 
+                        
+                            </div>
+                            <p>
+                                Do you want to continue wth this download?
+                            </p>
+                        </div>
+
+                        <div id="downloadOverWeb" class="ui-body-b ui-content  ui-corner-all">
+                            <div>
+                                Click "download" to begin downloading the file through your browser. 
+                        
+                            </div>
+
+                        </div>
+
+                      
+
+
+                            <a id="btnSermonsDownloadConfirm" href="#" data-role="button" data-inline="true" data-theme="b">download</a>
+
+                            <a href="#" data-role="button" data-inline="true" id="btn_pgsermons_abortdownload" data-theme="a">cancel</a>
+
+                            <div class="ui-body-d ui-content  ui-corner-all" style="padding: 2px; margin-bottom: 5px" id="pg_sermons_download_sts">
+                                Download Status: Not Started
+                            </div>
+
+                        
+
+                    </div>
+
+                    <div class="ui-body-b  ui-corner-all" style="padding: 2px; margin-bottom: 5px">
+                        <div data-role="header" data-theme="b" class="ui-corner-top">
+                            <h4>Title?</h4>
+                        </div>
+                        <div id="pg_sermons_item_title" class="ui-corner-all ui-content"></div>
+                    </div>
+
+                    <div class="ui-body-b  ui-corner-all" style="padding: 2px; margin-bottom: 5px">
+                        <div data-role="header" data-theme="b" class="ui-corner-top">
+                            <h4>Summary</h4>
+                        </div>
+                        <div id="pg_sermons_item_summary" class="ui-corner-all ui-content"></div>
+                    </div>
+
+
+                    <div class="ui-body-b  ui-corner-all" style="padding: 2px; margin-bottom: 5px">
+                        <div data-role="header" data-theme="b" class="ui-corner-top">
+                            <h4>Publish Date</h4>
+                        </div>
+                        <div id="pg_sermons_item_publishdate" class="ui-corner-all ui-content"></div>
+                    </div>
+
+
+                    
+
+
+                </div>
+
+
+
+
+
+
+
+
+               
+
+
+
+                <div data-role="popup" id="pg_sermons_downloadsuccess_popup" data-overlay-theme="a" style="max-width: 400px;"
+                    class="ui-corner-all">
+                    <div data-role="header" data-theme="c" class="ui-corner-top">
+                        <h1>Download Success</h1>
+                    </div>
+                    <div data-role="content" data-theme="a" class="ui-corner-bottom ui-content">
+                        <p>
+                            The file you requested has been downloaded successfully to your device. Below you will find the location where
+                        the file has been saved. Using your "Files" app you can navigate to the file and and open it from there.
+                        </p>
+                        <p id="dowload_success_fileExt">Please note we were not able to detect the file type of this file. You may need to alter the file extension in order to play it or download the file by visiting the web application at www.godochurch.com</p>
+                        <p id="pg_sermon_downloadfilepath">
+                        </p>
+
+
+                        <a href="#" data-role="button" data-inline="true" data-rel="back" data-theme="c">Okay!</a>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+
+    <!-- /page -->
+
+</body>
+</html>

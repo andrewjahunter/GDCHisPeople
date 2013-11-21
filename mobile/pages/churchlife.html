@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="../styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
+    <link href="../styles/app.css" rel="stylesheet" />
+    <link href="../styles/gdc.mobile.min.css" rel="stylesheet" />
+    <link href="../styles/jquery.mobile.structure-1.3.0.min.css" rel="stylesheet" />  
+    <script data-main="../scripts/app/appstart.min.js" src="../../scripts/libraries/require.js"></script>
+</head>
+<body  style="background-color:#343131;  color: white; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif">
+
+    <div data-role="page" id="pg_churchlife" data-theme="a" data-dom-cache="true">
+        <div data-role="panel" id="pg_churchlife_menuPanel" data-display="push" data-theme="g">
+            <div style="width: 100%; max-width: 80px; max-height: 80px; margin-left: auto; margin-right: auto">
+                <img border="0" src="" class="menu_fbpic" alt="facebook profile pic" style="width: 100%; height: auto" />
+
+            </div>
+             <ul data-role="listview" class="slideMenuListView"  data-theme="i" data-inset="true" id="' + panelId + '_menu_lv" data-divider-theme="g" >
+                
+                 <li><a href="#" class="menu_home">Home</a></li>
+                 <li><a href="#" class="menu_sermons">Sermons</a></li>
+                 <li><a href="#" class="menu_followup">Follow Up</a></li>
+                 <li><a href="#" class="menu_messages">Messages</a></li> 
+                 <li><a href="#" class="menu_pinfo">Personal Info</a></li>
+                 <li><a href="#" class="menu_subs">Newsletters</a></li>    
+                <li><a href="#" class="menu_groups">Groups</a></li>       
+                 <li><a href="#" class="menu_eventProfiles">Upcoming Events</a></li>
+                   <li><a href="#" class="menu_churchlife">Church Life</a></li> 
+                                
+                <li> <a href="#"  class="menu_closeMenu" data-theme="d" >Close Menu</a></li>
+                </ul>
+        </div>
+        <div data-role="header">
+            <a href="#" id="pg_churchlife_showMenu" data-icon="bars" data-role="button" data-theme="b" >menu<span class="slideMenuButtonBubbleSpan"></span></a>
+            <h1 class="pageHeader" id="pg_churchlife_header">church life</h1>
+             <a href="home.html" data-icon="home" data-transition="slide" data-direction="reverse" data-theme="b"  data-role="button" data-iconpos="notext" >home</a>
+        </div>
+        <!-- /header -->
+        <div data-role="content" style="padding: 15px">
+            <div data-role="popup" class="ui-content" id="pg_churchlife_errpopup" data-theme="e">
+                <div id="pg_churchlife_errpopmessage"></div>
+            </div>
+            <div data-role="popup" class="ui-content" id="msgpopup" data-theme="h">
+                <div id="msgpopupcontent"></div>
+            </div>
+
+            <div data-role="popup" class="ui-content" id="pg_churchlife_msgpopup" data-theme="h">
+                <div id="pg_churchlife_msgpopmessage"></div>
+            </div>
+
+            <script id="customfields-template" type="text/html">
+                <div data-role="collapsible" data-collapsed="true" data-theme="b" data-content-theme="b">
+                    <h4 data-bind="text: name"></h4>
+                    <div class="ui-body-b  ui-corner-all" style="padding: 10px; text-align: center">
+                            <strong data-bind="text: description()"></strong>
+                        </div>
+                   
+                    <div data-role="collapsible-set" data-bind="foreach: fields">
+                        <div data-role="collapsible" data-collapsed="true" data-theme="d" data-content-theme="d">
+                            <h4 data-bind="text: name"></h4>
+                            <div class="ui-body-d  ui-corner-all" style="padding: 10px; text-align: center">
+                            <strong data-bind="text: description()"></strong>
+                        </div>
+                            <div data-role="collapsible-set" data-bind="foreach: listItems">
+                                <div data-role="collapsible" data-bind="attr:{id:id()}" class="listItemCollapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                                    <h4 data-bind="text: name"></h4>
+
+                                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+                                        <legend></legend>
+                                        <input type="radio" data-theme="b" data-bind="attr: {name: id(), id: 'li1' + id()}" value="-1">
+                                        <label data-bind="attr: {for: 'li1' + id()}, text:$parent.unknownWording()">minus1 1</label>
+
+                                        <input type="radio" data-theme="b" data-bind="attr: {name: id(), id: 'li2' + id()}" value="0">
+                                        <label data-bind="attr: {for: 'li2' + id()}, text:$parent.uncheckedWording()">zero</label>
+
+                                        <input type="radio" data-theme="b" data-bind="attr: {name: id(), id: 'li3' + id()}" value="1">
+                                        <label data-bind="attr: {for: 'li3' + id()}, text:$parent.checkedWording()">one</label>
+
+                                    </fieldset>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                   
+                </div>
+               
+            </script>
+
+            
+
+            <div id="cflistcontainer">
+                                 <a href="#pg_churchlife_whatisthis" data-role="button" data-rel="popup" data-theme="h" data-transition="slideup">what is this?</a>
+
+                <div data-role="collapsible-set" id="cflistcallapse" data-bind="template: { name: 'customfields-template', foreach: cfGroups}">
+                </div>
+
+            </div>
+
+            <div data-role="popup" id="pg_churchlife_whatisthis"  data-overlay-theme="a" style="max-width: 400px;"
+                class="ui-corner-all">
+                <div data-role="header" data-theme="h" class="ui-corner-top">
+                    <h1>Church Life</h1>
+                </div>
+                <div data-role="content" data-theme="a" class="ui-corner-bottom ">
+
+                    <p>
+                       Church Life is a very powerful and flexible system of simple <strong>lists</strong> that your church/ministry
+                        can use to help communicate and group people meaningfully.
+
+                    </p>
+                    <p>All lists are neatly grouped into <strong>2 layers</strong> starting with the top level category, followed by the 2nd level fields and then all the list items in that
+                        field.
+                    </p>
+                    <p>
+                        Each list item has <strong>three options</strong> for you to choose from. Using the navigation tool below simply navigate down to the list 
+                        you would like edit against your profile and set the required field
+                    </p>
+                   
+  
+                    <a href="#" data-role="button" data-theme="h" data-rel="back">thanks!</a>
+                  
+                </div>
+            </div>
+
+             <div id="pg_churchlife_none" style="display:none">
+
+                  <div data-role="header" data-theme="h" class="ui-corner-top">
+                    <h1>No Church Fields</h1>
+                </div>
+                <div class="ui-body-h ui-corner-bottom ui-content">
+                     <p>
+                        Currently this church has not set any church life fields which are visible by your profile.  
+                    </p>
+                    <p>
+                        Church Life fields provide a church/ministry with endless ways in which to communicate, shepherd and group people
+                        within their congregation. Please contact your church or ministry office to encourage them to activate some of the fields.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- /page -->
+
+</body>
+</html>

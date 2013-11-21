@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="mobile/styles/jquery-ui-1.9.1.custom.min.css" rel="stylesheet" />
+    <link href="mobile/styles/app.css" rel="stylesheet" />
+    <link href="mobile/styles/gdc.mobile.min.css" rel="stylesheet" />
+    <link href="mobile/styles/jquery.mobile.structure-1.3.0.min.css" rel="stylesheet" />  
+   
+     <script data-main="mobile/scripts/app/appstart.min.js" src="scripts/libraries/require.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        window.gdd = window.gdd || {};
+     
+        // Wait for Cordova to load
+        function indexPageLoaded() {       
+            window.gdd.deviceIsReady = false;
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }
+
+        // Cordova is ready
+        function onDeviceReady() {        
+            navigator.splashscreen.hide();
+            window.gdd = window.gdd || {};
+            window.gdd.deviceIsReady = true;
+
+            try {
+
+                document.addEventListener("resume", onAppResume, false);
+
+                document.addEventListener("menubutton", onMenuKeyDown, false);
+
+                document.addEventListener("offline", wentOffline, false);
+
+                document.addEventListener("online", wentOnline, false);
+
+            }
+            catch (err) {
+                showPageIndexError("The following error occured during the onDeviceReady event: " + err + ". Please check you are connected to the Internet and try again.")
+            }
+
+        }
+
+        function onAppResume() {
+            try {
+                // alert("App Resume event fired")
+                //gdd.views.utils.showLoader("waking up...")
+                // alert("value of gdd.views.utils: " + gdd.views.utils + " value of  window.gdd.requireJsLoaded: " + window.gdd.requireJsLoaded)
+                if ((gdd.isReady()) && (gdd.onLine())) {
+                    // alert("App Start from onAppResume")
+                    gdd.views.utils.processAppStart();
+                } else {
+                    // alert("Not Ready or Not Online from onAppResume")
+                    if (gdd.indexPageIsActive()) {
+                        runProgressState()
+                    } else {
+                        window.location.href = gdd.indexPagePath();
+                    }
+                }
+            }
+            catch (err) {
+                showPageIndexError("Error onAppResume: " + err)
+            }
+        }
+
+        function wentOnline() {
+            try {
+                // alert("Online fired")
+
+                if ((gdd.isReady()) && (gdd.onLine())) {
+
+                    if (window.gdd.appWentOffline) {
+                        $.mobile.changePage(gdd.views.pageinfo.home.path)
+                        window.gdd.appWentOffline = false;
+                    }
+
+                } else {
+                    // alert("Online fired not ready not online")
+                    if (gdd.indexPageIsActive()) {
+                        runProgressState()
+                    } else {
+                        window.location.href = gdd.indexPagePath();
+                    }
+                }
+            }
+            catch (err) {
+                showPageIndexError("Error occured when app came online: " + err)
+            }
+
+        }
+
+        function wentOffline() {
+            try {
+                // alert("offline fired")
+                window.gdd.appWentOffline = true;
+
+                if (gdd.indexPageIsActive()) {
+                    //alert("offline fires we are on index page")
+                    showPageIndexError("Please check you are connected to the internet. Once you are reconnected please click try again")
+                } else {
+                    // alert("offline go to index page")
+                    window.location.href = gdd.indexPagePath();
+                }
+
+            }
+            catch (err) {
+
+                showPageIndexError("The following occurred when app went offline: " + err)
+            }
+
+        }
+
+
+        function onMenuKeyDown() {
+            try {
+                // alert("Go Home")
+                $.mobile.changePage(gdd.views.pageinfo.home.path)
+            }
+            catch (err) {
+
+            }
+
+        };
+
+
+
+    </script>
+
+  
+</head>
+   <body style="background-image: url('mobile/img/appbackground_dark.png'); color: white; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif" onload="indexPageLoaded();">
+<!--<body style="background-color:#343131;  color: white; font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif" onload="indexPageLoaded();">-->
+
+    <div data-role="page" data-theme="g" id="pg_index" style="background:transparent">
+
+        <style>
+
+
+            /*#region ERR CONNECTION*/
+             #errConnection {
+                
+                padding: 15px;
+                width:250px;
+                display:none;
+                margin-top:20px;
+                margin-left:auto;
+                margin-right:auto;
+                background: #afc6ef;
+                border: 1px solid #000080;
+                border-radius: 10px;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;          
+                text-align: center;
+            }
+            /*#endregion*/
+           
+
+            /*#region BUTTON*/
+            .actionIndexBtn .defaultIndexBtn {
+                border: 1px solid #3079ED;
+                color: white;
+                text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+                background-color: #4D90FE;
+                background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#4787ed));
+                background-image: -webkit-linear-gradient(top,#4d90fe,#4787ed);
+                background-image: -moz-linear-gradient(top,#4d90fe,#4787ed);
+                background-image: -ms-linear-gradient(top,#4d90fe,#4787ed);
+                background-image: -o-linear-gradient(top,#4d90fe,#4787ed);
+                background-image: linear-gradient(top,#4d90fe,#4787ed);
+                border-image: initial;
+            }
+
+
+            .defaultIndexBtn {
+                /*display: inline-block;*/
+                /*min-width: 46px;*/
+                text-align: center;
+                color: #444;
+                font-size: 11px;
+                font-weight: bold;
+                height: 27px;
+                padding: 0 8px;
+                line-height: 27px;
+                -webkit-border-radius: 2px;
+                -moz-border-radius: 2px;
+                border-radius: 2px;
+                -webkit-transition: all 0.218s;
+                -moz-transition: all 0.218s;
+                -ms-transition: all 0.218s;
+                -o-transition: all 0.218s;
+                transition: all 0.218s;
+                border: 1px solid gainsboro;
+                background-color: whiteSmoke;
+                background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#f1f1f1));
+                background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+                background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+                background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
+                background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
+                background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+                cursor: default;
+                border-image: initial;
+            }
+            /*#endregion*/
+
+
+            /*#region LOADING*/
+            #loadingProgressG {
+                width: 250px;
+                height: 20px;
+                overflow: hidden;
+                background-color: #6994C9;
+                -moz-border-radius: 10px;
+                -webkit-border-radius: 10px;
+                -ms-border-radius: 10px;
+                -o-border-radius: 10px;
+                border-radius: 10px;
+            }
+
+            .loadingProgressG {
+                background-color: #3281B5;
+                margin-top: 0;
+                margin-left: -256px;
+                -moz-animation-name: bounce_loadingProgressG;
+                -moz-animation-duration: 2.8s;
+                -moz-animation-iteration-count: infinite;
+                -moz-animation-timing-function: linear;
+                -webkit-animation-name: bounce_loadingProgressG;
+                -webkit-animation-duration: 2.8s;
+                -webkit-animation-iteration-count: infinite;
+                -webkit-animation-timing-function: linear;
+                -ms-animation-name: bounce_loadingProgressG;
+                -ms-animation-duration: 2.8s;
+                -ms-animation-iteration-count: infinite;
+                -ms-animation-timing-function: linear;
+                -o-animation-name: bounce_loadingProgressG;
+                -o-animation-duration: 2.8s;
+                -o-animation-iteration-count: infinite;
+                -o-animation-timing-function: linear;
+                animation-name: bounce_loadingProgressG;
+                animation-duration: 2.8s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+                width: 256px;
+                height: 20px;
+            }
+
+            @-moz-keyframes bounce_loadingProgressG {
+                0% {
+                    margin-left: -256px;
+                }
+
+                100% {
+                    margin-left: 256px;
+                }
+            }
+
+            @-webkit-keyframes bounce_loadingProgressG {
+                0% {
+                    margin-left: -256px;
+                }
+
+                100% {
+                    margin-left: 256px;
+                }
+            }
+
+            @-ms-keyframes bounce_loadingProgressG {
+                0% {
+                    margin-left: -256px;
+                }
+
+                100% {
+                    margin-left: 256px;
+                }
+            }
+
+            @-o-keyframes bounce_loadingProgressG {
+                0%;
+
+            {
+                margin-left: -256px;
+            }
+
+            100% {
+                margin-left: 256px;
+            }
+
+            }
+
+            @keyframes bounce_loadingProgressG {
+                0% {
+                    margin-left: -256px;
+                }
+
+                100% {
+                    margin-left: 256px;
+                }
+            }
+            /*#endregion*/
+        </style>
+
+        <script type="text/javascript">
+
+            var stateArr = new Array()
+            stateArr[0] = "initializing..."
+            stateArr[1] = "loading native api..."
+            stateArr[2] = "checking connection..."
+            stateArr[3] = "checking connection..."
+            stateArr[4] = "loading js modules..."
+            stateArr[5] = "loading js modules..."
+            stateArr[6] = "loading google maps..."
+            stateArr[7] = "loading google maps..."
+            stateArr[8] = "securing..."
+            stateArr[9] = "finalizing..."
+            stateArr[10] = "finalizing..."
+
+
+
+            function runProgressState() {
+                // alert("running progress state")
+
+                var e = document.getElementById("errConnection");
+                e.style.display = 'none'
+
+                var z = document.getElementById("progressDiv");
+                z.style.display = 'block'
+
+                var attemptCount = 0
+                document.getElementById("progressState").innerHTML = "launching..."
+                window.clearInterval(gdd.progressStateInterval);
+
+                var progressState = function () {
+
+                    if ((gdd.onLine()) && (gdd.isReady())) {
+                        window.clearInterval(gdd.progressStateInterval);
+
+                        gdd.views.utils.processAppStart();
+
+
+                    } else {
+                        attemptCount += 1;
+                        if (attemptCount === 10) {
+                            window.clearInterval(gdd.progressStateInterval);
+
+                            showPageIndexError("Your device is either not connected to the internet or the connection is very slow. Please connect to the internet and try again.")
+                        } else {
+                            try {
+                                document.getElementById("progressState").innerHTML = stateArr[attemptCount]
+                            }
+                            catch (err) {
+                                document.getElementById("progressState").innerHTML = "loading..."
+                            }
+                        }
+                    }
+
+                }
+
+                if (gdd.onLine()) {
+                    gdd.progressStateInterval = self.setInterval(function () {
+
+                        progressState()
+
+                    }, 500);
+                } else {
+                    showPageIndexError("Your device is not connected to the internet, please establish a connection and try again.")
+                }
+
+
+            }
+
+            function showPageIndexError(err) {
+                window.clearInterval(gdd.progressStateInterval);
+
+                document.getElementById("indexErrMsg").innerHTML = err
+
+                var e = document.getElementById("errConnection");
+                e.style.display = 'block'
+
+                var z = document.getElementById("progressDiv");
+                z.style.display = 'none'
+
+            }
+
+        </script>
+
+       
+        <div style="width: 100%; margin-top: 50px">
+
+            <div style="font-size: small; font-style: italic; white-space: normal; text-align: center; width: 270px; margin-left: auto; margin-right: auto">
+
+                <div style="width: 100px; margin-bottom: 20px; margin-left: auto; margin-right: auto">
+
+                    <img src="mobile/img/inAppIcon.png" style="width: 100px; height: 100px" />
+
+                </div>
+
+                Be shepherds of God's flock that is under your care, watching over them - 1 Peter 5:2 
+            </div>
+
+            <div id="progressDiv" style="width: 250px; margin-top: 20px; margin-left: auto; margin-right: auto">
+
+                <table>
+                    <tr>
+                        <td>
+                            <div id="loadingProgressG">
+                                <div id="loadingProgressG_1" class="loadingProgressG">
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div id="progressState" style="text-align: center">initializing....</div>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div id="errConnection" >
+                                <p id="indexErrMsg">Your device is not connected to the Internet. Please ensure you are connected and then try again.</p>
+
+                <div class="actionIndexBtn">
+                    <div class="defaultIndexBtn" onclick="window.location.reload()">Try Again</div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+  
+</body>
+
+
+
+
+<script type="text/javascript" src="PushNotification.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+
+</html>
