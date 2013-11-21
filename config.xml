@@ -6,10 +6,10 @@
         id        = "com.godochurch.hispeople"
         version   = "1.1.2">
 
-  <name>Godochurch</name>
+  <name>His People Mobile</name>
 
   <description>
-    Godochurch helps you focus on ministry while we help with your admin.
+    This is the His People version of the Godochurch app.
   </description>
 
   <author href="http://phonegap.com" email="support@gododata.com">
