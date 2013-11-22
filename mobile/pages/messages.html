@@ -73,7 +73,7 @@
             </div>
 
 
-            <div data-bind="foreach: messages">
+             <div data-bind="foreach: messages">
                 <div class="ui-body-d  ui-corner-all" style="padding: 10px">
                     <div class="ui-body-c  ui-corner-all" style="padding: 10px; text-align: center">
                         <strong data-bind="html:subject"></strong>
@@ -84,12 +84,12 @@
                     <p><i><small data-bind="html:'Sent By: ' + sentBy + '    Sent From: ' + portalName + '    Viewed On: ' +  viewedOn"></small></i></p>
                 </div>
 
-                <a data-role="button" data-mini="true" data-inline="true" class="btnReadMsg" href="#" data-bind="attr: {'data-id': id}, visible: !viewed" data-theme="c">Mark as Read</a>
+                <a data-role="button" data-mini="true" data-inline="true" class="btnReadMsg" href="#" data-bind="attr: {'data-id': id}, visible: !viewed" data-theme="b">Mark as Read</a>
 
                                 <a data-role="button" data-mini="true" data-inline="true" class="btnUnReadMsg" href="#" data-bind="attr: {'data-id': id}, visible: viewed " data-theme="d">Mark as Un-Read</a>
 
 
-                <a data-role="button" data-mini="true" data-inline="true" class="btnReplyMsg" href="#" data-bind="attr: {'data-id': id}, visible: replyEnabled" data-theme="b">Reply</a>
+                <a data-role="button" data-mini="true" data-inline="true" class="btnReplyMsg" href="#" data-bind="attr: {'data-id': id}, visible: replyEnabled" data-theme="a">Reply</a>
 
 
 
