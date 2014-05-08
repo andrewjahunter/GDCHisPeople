@@ -16,49 +16,49 @@
         <div data-role="header">
                         <a href="#" id="pgFUBNotesBack" class="ui-btn ui-btn-b ui-icon-check ui-btn-icon-notext"    >done</a>
 
-            <h1 class="pageHeader" >notes</h1>
+            <h1 class="pageHeader" >Notes</h1>
         </div>
         <!-- /header -->
         <div  class="ui-content" style="padding: 15px">
 
-          
+            <div class="pageViewContent">
 
-            <div data-role="popup" class="ui-content" id="pg_FUPNotes_errpopup" data-theme="e">
-                <div id="pg_FUPNotes_errpopup_msg"></div>
+                <div data-role="popup" class="ui-content" id="pg_FUPNotes_errpopup" data-theme="e">
+                    <div id="pg_FUPNotes_errpopup_msg"></div>
+                </div>
+
+
+                <div data-bind="foreach: notes">
+                    <div class="ui-body-d  ui-corner-all" style="padding: 10px">
+
+                        <p class="ui-body-c  ui-corner-all" data-bind="html:detail" style="padding: 10px">
+                        </p>
+
+                        <p><i><small data-bind="html:'Edited By: ' + userChanged + '    Edited On: ' + dateChanged"></small></i></p>
+                    </div>
+
+                    <br />
+                </div>
+
+
+
+
+                <div id="pg_FUPNotes_none" style="display: none">
+                    <div data-role="header" data-theme="h" class="ui-corner-top">
+                        <h1>No Notes</h1>
+                    </div>
+                    <div class="ui-content ui-body-h  ui-corner-bottom">
+
+                        <p>
+                            There are no notes viewable on this account for this person.
+                        </p>
+                    </div>
+                </div>
+
+
             </div>
 
-
-             <div data-bind="foreach: notes">
-                <div class="ui-body-d  ui-corner-all" style="padding: 10px">
-                   
-                    <p class="ui-body-c  ui-corner-all" data-bind="html:detail" style="padding: 10px">
-                    </p>
-
-                    <p><i><small data-bind="html:'Edited By: ' + userChanged + '    Edited On: ' + dateChanged"></small></i></p>
-                </div>
-               
-                <br />
             </div>
-
-           
-
-            
-            <div id="pg_FUPNotes_none" style="display: none">
-                <div data-role="header" data-theme="h" class="ui-corner-top">
-                    <h1>No Notes</h1>
-                </div>
-                <div  class="ui-content ui-body-h  ui-corner-bottom">
-                   
-                    <p>
-                        There are no notes viewable on this account for this person.
-                    </p>
-                </div>
-            </div>
-        
-
-
-
-        </div>
 
     </div>
 
